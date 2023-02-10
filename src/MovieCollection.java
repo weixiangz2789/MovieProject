@@ -238,21 +238,23 @@ public class MovieCollection {
         int choiceNum = i + 1;
         System.out.println("" + choiceNum + ". " + temp.get(i));
       }
-      System.out.println("Which movie would you like to learn more about?");
+      System.out.println("Who would you like to learn more about?");
       System.out.print("Enter number: ");
       String choice = temp.get(scanner.nextInt()-1);
       scanner.nextLine();
       ArrayList <Movie> featured = new ArrayList<>();
-      int num = 1;
-      for (int i = 0; i < movies.size(); i++) {
-        String movieTitle = movies.get(i).getCast();
-        if (movieTitle.indexOf(choice) != -1) {
-          featured.add(movies.get(i));
 
-          System.out.println(num+ ". " + movies.get(i).getTitle());
-          num ++;
+      for (int i = 0; i < movies.size(); i++) {
+        String movieCast = movies.get(i).getCast();
+        if (movieCast.indexOf(choice) != -1) {
+          featured.add(movies.get(i));
         }
       }
+      sortResults(featured);
+      for (int i = 0; i < featured.size(); i ++){
+        System.out.println(i+1+ ". " + featured.get(i).getTitle());
+      }
+
       System.out.println("Which movie would you like to learn more about?");
       System.out.print("Enter number: ");
       int choice1 = scanner.nextInt();
@@ -266,7 +268,7 @@ public class MovieCollection {
     }
     scanner.nextLine();
   }
-  
+
   private void listGenres() {
     ArrayList <String> genreList = new ArrayList<>();
     for (int i = 0; i < movies.size(); i ++){
@@ -296,21 +298,57 @@ public class MovieCollection {
     for (int i = 0; i < allMovies.size(); i ++){
       System.out.println(i+1 + ". " + allMovies.get(i).getTitle());
     }
-
   }
   
   private void listHighestRated() {
-    ArrayList<Double> allRatings = new ArrayList<>();
+    ArrayList<Double> temp = new ArrayList<>();
+    ArrayList<Double> highestRated = new ArrayList<>();
+    ArrayList<Movie> highestRatedList = new ArrayList<>();
     for (int i = 0; i < movies.size(); i ++){
-      allRatings.add(movies.get(i).getUserRating());
+      temp.add(movies.get(i).getUserRating());
     }
-    Collections.sort(allRatings);
-    for (int i = allRatings.size()-51; i < allRatings.size(); i ++){
-      System.out.println(i+1 + ". " + allRatings.get(i));
+    Collections.sort(temp);
+    for (int i = temp.size()-50; i < temp.size(); i ++){
+      highestRated.add(temp.get(i));
+    }
+    for (int i = highestRated.size()-1; i >= 0; i --){
+      for (int x = 0; x < movies.size(); x ++){
+        if (highestRated.get(i) == movies.get(x).getUserRating() && !highestRatedList.contains(movies.get(x))){
+          if (highestRatedList.size() == 50){
+            break;
+          }
+          highestRatedList.add(movies.get(x));
+        }
+      }
+    }
+    for (int i = 0; i < highestRatedList.size(); i ++){
+      System.out.println(i+1 + ". " + highestRatedList.get(i).getTitle() +  ": " + highestRatedList.get(i).getUserRating());
     }
   }
   
   private void listHighestRevenue() {
-    /* TASK 6: IMPLEMENT ME */
+    ArrayList<Integer> temp = new ArrayList<>();
+    ArrayList<Integer> highestRev = new ArrayList<>();
+    ArrayList<Movie> highestRevList = new ArrayList<>();
+    for (int i = 0; i < movies.size(); i ++){
+      temp.add(movies.get(i).getRevenue());
+    }
+    Collections.sort(temp);
+    for (int i = temp.size()-50; i < temp.size(); i ++){
+      highestRev.add(temp.get(i));
+    }
+    for (int i = highestRev.size()-1; i >= 0; i --){
+      for (int x = 0; x < movies.size(); x ++){
+        if (highestRev.get(i) == movies.get(x).getRevenue() && !highestRevList.contains(movies.get(x))){
+          if (highestRevList.size() == 50){
+            break;
+          }
+          highestRevList.add(movies.get(x));
+        }
+      }
+    }
+    for (int i = 0; i < highestRevList.size(); i ++){
+      System.out.println(i+1 + ". " + highestRevList.get(i).getTitle() +  ": " + highestRevList.get(i).getRevenue());
+    }
   }
 }
